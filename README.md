@@ -1,71 +1,58 @@
-# JSON/XML Viewer Plus 🚀
+# Dev Toolkit
 
-**JSON/XML Viewer Plus** is a powerful, developer-centric visualization tool for VS Code. Unlike standard viewers that replace your current file, this extension provides a dedicated, persistent dashboard to manage, compare, and manipulate multiple JSON and XML snippets simultaneously.
+Code & JSON viewer and compare, inside VS Code — the in-editor companion of the [Dev Toolkit website](https://alonpeleg.github.io/devtools/).
 
----
+## Open it
 
-## ✨ Key Features
+Click **Dev Toolkit** in the status bar (bottom-left) or run **Dev Toolkit: Open Dev Toolkit** from the Command Palette. The panel opens in a split next to your editor.
 
-### 📂 Multi-Entry Management
-Don't lose your previous work. Every time you paste a new snippet, it creates a new **Entry Card**. 
-* **Name your entries:** Keep track of different API responses by giving them custom titles.
-* **Timestamped logs:** Automatic timestamps tell you exactly when you inspected the data.
-* **Cleanup:** Clear the entire dashboard or remove specific entries with a single click.
+## Send code from the editor
 
-### 🔍 Deep Search & Auto-Expand
-Finding nested data in massive structures is effortless. The built-in search allows you to:
-* **Highlight all matches** within a specific entry.
-* **Auto-Expand:** The viewer automatically opens collapsed tree nodes to reveal the results.
-* **Smart Navigation:** Cycle through results with `Enter`; the view scrolls to the active match automatically.
+Select code or JSON → right-click → **Send to Dev Toolkit** (or press `Ctrl+Alt+D` / `Cmd+Alt+D`).
 
-### 📍 Intelligent Breadcrumbs
-As you hover over any key or tag, the **Breadcrumb Bar** dynamically updates to show the full path (e.g., `root.orders[5].items[0].price`). 
-* **Right-Click Power:** Use the custom context menu to **Copy Path** instantly for use in your code.
+- Valid JSON (including JSON with comments / trailing commas) goes to the **JSON** tab.
+- Anything else goes to the **Code** tab, using the file's language.
+- Nothing selected? The whole file is sent.
+- **Send to Dev Toolkit Compare** puts the selection into Compare panel A, and the next one into B.
+- In the Explorer, right-click a file → **Send to Dev Toolkit**.
 
-### 🛠️ Developer Toolkit
-* **One-Click Minify:** Instantly copy a compact, single-line version of your data.
-* **One-Click Save:** Export snippets directly to your PC with auto-generated, timestamped filenames.
-* **Stay Open:** Use the "Keep Open" button to pin the viewer tab so it doesn't close when you navigate to other files.
+## Code tab
 
----
+| Viewer | Compare |
+| --- | --- |
+| Syntax highlighting with language auto-detect (click the badge to override) | Paste into A and B — the diff updates as you type |
+| Fold / unfold blocks, word wrap, find (`Enter` / `Shift+Enter`) | Split or unified view, character-level highlights |
+| Copy, download, open in a new editor tab | Ignore whitespace, swap A/B, format, sync scroll |
+| Rename entries, collapse cards | Jump between changes, copy as unified diff |
 
-## 🚀 How to Use
+## JSON tab
 
-1. **Open the Viewer:** Click the `JSON/XML Viewer` icon in the **Status Bar** (bottom-left) or run `Open JSON Viewer` from the Command Palette (`Ctrl+Shift+P`).
-2. **Paste & Parse:** Paste your raw JSON or XML into the top input box and hit **Enter**.
-3. **Interact:** - Click `▼` to collapse or expand sections.
-   - Hover over nodes to see the data path in the breadcrumb bar.
-   - Use the **Find** box to locate specific values within a card.
-   - Click the **Save** icon to download the snippet as a file.
+| Viewer | Compare |
+| --- | --- |
+| Collapsible tree with item / key counts | **Changes** list: every added, removed and changed path |
+| Hover a node to see its path, click the link icon to copy it | **Split** / **Unified** text diff of the formatted JSON |
+| Copy formatted, copy minified, download `.json` | **Sort keys** so key order doesn't count as a change |
+| Find with auto-expand of collapsed nodes | Format A / B, swap, sync scroll |
 
----
+**Compare from the viewer:** click **Compare** in the viewer toolbar, then click two entries — they open side by side in the Compare tab.
 
-## 🎨 Professional UI
-* **VS Code Native Theming:** The interface automatically matches your active theme (Dark, Light, or High Contrast).
-* **Cascadia Code Support:** Uses modern, readable monospaced fonts for clear data inspection.
-* **Visual Cues:** Smooth flash animations on copy and color-coded badges for easy format identification.
+Drag & drop files onto the paste box (or onto a compare panel) to load them.
 
----
+## Settings
 
-## 📦 Installation
+| Setting | Default | |
+| --- | --- | --- |
+| `devToolkit.jsonIndent` | `2` | Indentation for formatted / copied / downloaded JSON |
+| `devToolkit.showStatusBarButton` | `true` | Show the status bar button |
+| `devToolkit.revealOnSend` | `true` | Bring the panel into view when sending |
 
-1. Open **VS Code**.
-2. Go to the **Extensions** view (`Ctrl+Shift+X`).
-3. Search for `json-viewer-plus`.
-4. Click **Install**.
+## Development
 
-### Requirements
-* VS Code version `^1.109.0`
+```bash
+npm install
+npm run compile      # or: npm run watch
+# F5 in VS Code to launch an Extension Development Host
+npx @vscode/vsce package
+```
 
----
-
-## 🛠 Extension Settings & Commands
-
-This extension contributes the following:
-
-* `json-viewer-plus.open`: Opens the main viewer panel.
-* **Status Bar Item**: A permanent shortcut in the bottom bar for quick access.
-
----
-
-Made by [alonpe](https://github.com/alonpe).
+Made by [alonpe](https://github.com/AlonPeleg).

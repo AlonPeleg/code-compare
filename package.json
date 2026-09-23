@@ -1,42 +1,126 @@
 {
-  "name": "json-viewer-plus",
-  "displayName": "json-viewer-plus",
-  "description": "a json/xml viewer and compare",
+  "name": "dev-toolkit",
+  "displayName": "Dev Toolkit",
+  "description": "Code & JSON viewer and compare, right inside VS Code. Send any selection from the editor with a right-click.",
   "publisher": "alonpe",
-  "version": "0.1.0",
+  "version": "1.2.0",
+  "icon": "media/icon.png",
+  "license": "MIT",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Formatters",
+    "Visualization"
   ],
-  "activationEvents": ["onStartupFinished"],
+  "keywords": [
+    "json",
+    "json viewer",
+    "compare",
+    "diff",
+    "code viewer",
+    "devtools",
+    "dev toolkit"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onWebviewPanel:devToolkit"
+  ],
   "main": "./out/extension.js",
-"contributes": {
+  "contributes": {
     "commands": [
       {
-        "command": "json-viewer-plus.open",
-        "title": "Open JSON/XML Viewer and Compare",
-        "category": "JSON"
+        "command": "devToolkit.open",
+        "title": "Open Dev Toolkit",
+        "category": "Dev Toolkit",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "devToolkit.sendSelection",
+        "title": "Send to Dev Toolkit",
+        "category": "Dev Toolkit"
+      },
+      {
+        "command": "devToolkit.sendSelectionToCompare",
+        "title": "Send to Dev Toolkit Compare",
+        "category": "Dev Toolkit"
+      },
+      {
+        "command": "devToolkit.sendFile",
+        "title": "Send to Dev Toolkit",
+        "category": "Dev Toolkit"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "devToolkit.sendSelection",
+          "group": "9_devtoolkit@1"
+        },
+        {
+          "command": "devToolkit.sendSelectionToCompare",
+          "group": "9_devtoolkit@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "devToolkit.sendFile",
+          "when": "!explorerResourceIsFolder",
+          "group": "9_devtoolkit@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "devToolkit.sendFile",
+          "when": "false"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "devToolkit.sendSelection",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Dev Toolkit",
+      "properties": {
+        "devToolkit.jsonIndent": {
+          "type": "number",
+          "default": 2,
+          "enum": [2, 4],
+          "description": "Indentation used when formatting, copying and downloading JSON."
+        },
+        "devToolkit.showStatusBarButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Dev Toolkit button in the status bar."
+        },
+        "devToolkit.revealOnSend": {
+          "type": "boolean",
+          "default": true,
+          "description": "Bring the Dev Toolkit panel into view when you send something to it."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile",
-    "test": "vscode-test"
+    "package": "vsce package"
   },
   "devDependencies": {
-    "@types/vscode": "^1.109.0",
-    "@types/node": "22.x",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
     "typescript": "^5.9.3"
-
   },
-  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/AlonPeleg/json-viewer-plus"
-}
+  },
+  "homepage": "https://alonpeleg.github.io/devtools/"
 }

@@ -1,66 +1,92 @@
 import * as vscode from 'vscode';
-import { getWebviewContent } from './webviewContent';
-
-let panel: vscode.WebviewPanel | undefined;
+import * as path from 'path';
+import { DevToolkitPanel } from './panel';
+import { buildPayload } from './detect';
 
 export function activate(context: vscode.ExtensionContext) {
-    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-    statusBarItem.command = 'json-viewer-plus.open';
-    statusBarItem.text = `$(json) JSON/XML Viewer`;
-    statusBarItem.color = '#FFFFFF';
-    statusBarItem.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
-    statusBarItem.tooltip = 'Click to open JSON/XML Viewer';
-    statusBarItem.show();
+    // ---- Status bar button (bottom bar) ----
+    const statusBarItem = vscode.window.createStatusBarItem('devToolkit.status', vscode.StatusBarAlignment.Left, 100);
+    statusBarItem.name = 'Dev Toolkit';
+    statusBarItem.command = 'devToolkit.open';
+    statusBarItem.text = '$(tools) Dev Toolkit';
+    statusBarItem.tooltip = 'Open Dev Toolkit (Code & JSON viewer / compare)';
+    const syncStatusBar = () => {
+        const show = vscode.workspace.getConfiguration('devToolkit').get<boolean>('showStatusBarButton', true);
+        show ? statusBarItem.show() : statusBarItem.hide();
+    };
+    syncStatusBar();
 
-    let disposable = vscode.commands.registerCommand('json-viewer-plus.open', () => {
-        if (panel) {
-            panel.reveal(vscode.ViewColumn.Beside);
-        } else {
-            panel = vscode.window.createWebviewPanel(
-                'jsonViewer',
-                'JSON/XML Viewer',
-                vscode.ViewColumn.Beside,
-                { enableScripts: true, retainContextWhenHidden: true }
-            );
+    context.subscriptions.push(
+        statusBarItem,
+        vscode.workspace.onDidChangeConfiguration(e => {
+            if (e.affectsConfiguration('devToolkit.showStatusBarButton')) { syncStatusBar(); }
+            if (e.affectsConfiguration('devToolkit.jsonIndent')) { DevToolkitPanel.current?.pushSettings(); }
+        }),
 
-            panel.onDidDispose(() => { panel = undefined; }, null, context.subscriptions);
-            panel.webview.html = getWebviewContent();
+        vscode.commands.registerCommand('devToolkit.open', () => {
+            DevToolkitPanel.createOrShow(context.extensionUri, false);
+        }),
 
-            panel.webview.onDidReceiveMessage(async message => {
-                if (message.command === 'pinTab') {
-                    vscode.commands.executeCommand('workbench.action.keepEditor');
+        vscode.commands.registerCommand('devToolkit.sendSelection', () => sendFromEditor(context, false)),
+        vscode.commands.registerCommand('devToolkit.sendSelectionToCompare', () => sendFromEditor(context, true)),
+
+        vscode.commands.registerCommand('devToolkit.sendFile', async (uri?: vscode.Uri) => {
+            if (!uri) { return; }
+            try {
+                const bytes = await vscode.workspace.fs.readFile(uri);
+                const text = Buffer.from(bytes).toString('utf8');
+                if (!text.trim()) {
+                    vscode.window.showWarningMessage('Dev Toolkit: the file is empty.');
+                    return;
                 }
+                const fileName = path.basename(uri.fsPath);
+                const payload = buildPayload(text, undefined, fileName, fileName, false);
+                DevToolkitPanel.send(context.extensionUri, payload);
+            } catch (err: any) {
+                vscode.window.showErrorMessage('Dev Toolkit: could not read file — ' + (err?.message ?? err));
+            }
+        })
+    );
 
-                if (message.command === 'saveFile') {
-                    let { data, fileName, extension } = message;
-
-                    if (!fileName || fileName.trim() === '') {
-                        const now = new Date();
-                        const dateStr = now.toISOString().split('T')[0].replace(/-/g, '');
-                        const timeStr = now.getHours().toString().padStart(2, '0') +
-                            now.getMinutes().toString().padStart(2, '0') +
-                            now.getSeconds().toString().padStart(2, '0');
-                        fileName = `Export_${dateStr}_${timeStr}`;
-                    }
-
-                    const path = require('path');
-                    const homeDir = process.env.HOME || process.env.USERPROFILE || '';
-                    const defaultPath = vscode.Uri.file(path.join(homeDir, 'Desktop', fileName + '.' + extension));
-
-                    const uri = await vscode.window.showSaveDialog({
-                        defaultUri: defaultPath,
-                        filters: { 'Files': [extension] }
-                    });
-
-                    if (uri) {
-                        const content = extension === 'json' ? JSON.stringify(data, null, 4) : data;
-                        await vscode.workspace.fs.writeFile(uri, Buffer.from(content));
-                        vscode.window.showInformationMessage(`Saved: ${fileName}.${extension}`);
-                    }
-                }
-            });
+    // Restore the panel after a window reload.
+    vscode.window.registerWebviewPanelSerializer(DevToolkitPanel.viewType, {
+        async deserializeWebviewPanel(panel: vscode.WebviewPanel) {
+            DevToolkitPanel.revive(panel, context.extensionUri);
         }
     });
-
-    context.subscriptions.push(statusBarItem, disposable);
 }
+
+function sendFromEditor(context: vscode.ExtensionContext, toCompare: boolean) {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('Dev Toolkit: open a file and select some code first.');
+        return;
+    }
+    const doc = editor.document;
+    const selections = editor.selections.filter(s => !s.isEmpty);
+    const fileName = doc.isUntitled ? 'Untitled' : path.basename(doc.fileName);
+
+    let text: string;
+    let name: string;
+    if (selections.length === 0) {
+        // Nothing selected -> send the whole document.
+        text = doc.getText();
+        name = fileName;
+    } else {
+        const sorted = [...selections].sort((a, b) => a.start.compareTo(b.start));
+        text = sorted.map(s => doc.getText(s)).join('\n');
+        const first = sorted[0].start.line + 1;
+        const last = sorted[sorted.length - 1].end.line + 1;
+        name = first === last ? `${fileName}:${first}` : `${fileName}:${first}-${last}`;
+    }
+
+    if (!text.trim()) {
+        vscode.window.showInformationMessage('Dev Toolkit: nothing to send — the selection is empty.');
+        return;
+    }
+
+    const payload = buildPayload(text, doc.languageId, doc.isUntitled ? undefined : doc.fileName, name, toCompare);
+    DevToolkitPanel.send(context.extensionUri, payload);
+}
+
+export function deactivate() { /* nothing to clean up */ }
