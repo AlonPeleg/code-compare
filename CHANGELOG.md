@@ -1,5 +1,6 @@
 # Change Log
 
+<<<<<<< HEAD
 ## 1.2.0
 - Compare: new **Wrap lines** toggle (off by default). Without wrap, long lines scroll sideways — in split view each side scrolls horizontally and stays in sync, with line numbers pinned on the left.
 
@@ -13,6 +14,11 @@
 ## 1.0.0 — Dev Toolkit
 Complete rework of *json-viewer-plus* into **Dev Toolkit**.
 
+=======
+## 1.0.0 — Dev Toolkit
+Complete rework of *json-viewer-plus* into **Dev Toolkit**.
+
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
 - Renamed extension to **Dev Toolkit** (`dev-toolkit`); commands now live under `devToolkit.*`.
 - Status bar button opens the toolkit in a split panel next to your editor.
 - New **Code** tool: viewer (syntax highlighting, language auto-detect / override, folding, find, word wrap, copy, download, open in editor) and compare.

@@ -27,8 +27,11 @@
         plus: '<path d="M8 3v10M3 8h10"/>',
         check: '<path d="M3 8.5l3 3 7-7"/>',
         link: '<path d="M6.5 9.5l3-3M7 4.5l1-1a2.5 2.5 0 013.5 3.5l-1 1M9 11.5l-1 1a2.5 2.5 0 01-3.5-3.5l1-1"/>',
+<<<<<<< HEAD
         grid: '<rect x="2.5" y="2.5" width="4.5" height="4.5" rx=".6"/><rect x="9" y="2.5" width="4.5" height="4.5" rx=".6"/><rect x="2.5" y="9" width="4.5" height="4.5" rx=".6"/><rect x="9" y="9" width="4.5" height="4.5" rx=".6"/>',
         rows: '<rect x="2.5" y="2.5" width="11" height="4.5" rx=".6"/><rect x="2.5" y="9" width="11" height="4.5" rx=".6"/>',
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         pick: '<rect x="2" y="2.5" width="5" height="11" rx="1"/><rect x="9" y="2.5" width="5" height="11" rx="1"/>'
     };
     const icon = n => `<svg class="i" viewBox="0 0 16 16">${P[n]}</svg>`;
@@ -112,10 +115,16 @@
         sub: { code: 'view', json: 'view' },
         entries: { code: [], json: [] },
         compare: {
+<<<<<<< HEAD
             code: { a: blankSide(), b: blankSide(), view: 'split', ignoreWs: false, wrap: false },
             json: { a: blankSide(), b: blankSide(), view: 'changes', sortKeys: true, wrap: false }
         },
         layout: { code: 'list', json: 'list' },
+=======
+            code: { a: blankSide(), b: blankSide(), view: 'split', ignoreWs: false },
+            json: { a: blankSide(), b: blankSide(), view: 'changes', sortKeys: true }
+        },
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         syncScroll: true,
         settings: { jsonIndent: 2 }
     };
@@ -128,7 +137,10 @@
         json: Object.assign({}, defaults.compare.json, state.compare && state.compare.json)
     };
     state.settings = Object.assign({}, defaults.settings, state.settings);
+<<<<<<< HEAD
     state.layout = Object.assign({}, defaults.layout, state.layout);
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
     const persist = debounce(() => vscode.setState(state), 250);
 
     // UI-only state (not persisted)
@@ -163,10 +175,13 @@
                 <span class="hint">${isCode ? 'paste code — language is detected automatically' : 'paste JSON to explore it as a tree'}</span>
                 <div class="spacer"></div>
                 <button class="btn secondary" data-act="pick" title="Pick two snippets to compare">${icon('pick')} Compare</button>
+<<<<<<< HEAD
                 <div class="seg icons" title="Layout">
                     <button data-act="layout" data-layout="list" title="List view">${icon('rows')}</button>
                     <button data-act="layout" data-layout="grid" title="Grid view">${icon('grid')}</button>
                 </div>
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
                 <button class="ib" data-act="collapse-all-cards" title="Collapse all">${icon('collapse')}</button>
                 <button class="ib" data-act="expand-all-cards" title="Expand all">${icon('expand')}</button>
                 <button class="ib danger" data-act="clear-all" title="Clear all">${icon('trash')}</button>
@@ -227,7 +242,10 @@
                 ${isCode
                     ? `<label class="check"><input type="checkbox" data-act="opt" data-opt="ignoreWs"> Ignore whitespace</label>`
                     : `<label class="check" title="Ignore key order when comparing text"><input type="checkbox" data-act="opt" data-opt="sortKeys"> Sort keys</label>`}
+<<<<<<< HEAD
                 <label class="check" title="Wrap long lines instead of scrolling sideways"><input type="checkbox" data-act="opt" data-opt="wrap"> Wrap lines</label>
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
                 <div class="spacer"></div>
                 <button class="btn" data-act="run-compare">${icon('cols')} Compare</button>
             </div>
@@ -236,11 +254,16 @@
     }
 
     function langOptions(selected, detectedLabel) {
+<<<<<<< HEAD
         let html = `<option value="auto"${selected === 'auto' ? ' selected' : ''}>${detectedLabel ? esc(detectedLabel) : 'Auto-detect'}</option>`;
+=======
+        let html = `<option value="auto"${selected === 'auto' ? ' selected' : ''}>${detectedLabel ? 'Auto: ' + esc(detectedLabel) : 'Auto-detect'}</option>`;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         LANG_ORDER.forEach(id => { html += `<option value="${id}"${selected === id ? ' selected' : ''}>${LANGS[id].label}</option>`; });
         return html;
     }
 
+<<<<<<< HEAD
     function applyLayout(tool) {
         const pane = $(`#pane-${tool}-view`);
         const grid = state.layout[tool] === 'grid';
@@ -248,6 +271,8 @@
         $$('[data-act="layout"]', pane).forEach(b => b.classList.toggle('active', b.dataset.layout === state.layout[tool]));
     }
 
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
     /* ======================= navigation ======================= */
     function applyNav() {
         $$('.tool-tab').forEach(b => b.classList.toggle('active', b.dataset.tool === state.tool));
@@ -730,8 +755,12 @@
             res.innerHTML = html;
             return;
         }
+<<<<<<< HEAD
         const wrap = !!state.compare[tool].wrap;
         html += `<div class="diff ${view} ${wrap ? 'wrap' : 'nowrap'}">${diffRowsHtml(tool, d, view, wrap)}</div>`;
+=======
+        html += `<div class="diff ${view}">${diffRowsHtml(tool, d, view)}</div>`;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         res.innerHTML = html;
         changeCursor[tool] = -1;
     }
@@ -749,20 +778,32 @@
         return [ha, hb];
     }
 
+<<<<<<< HEAD
     function diffRowsHtml(tool, d, view, wrap) {
+=======
+    function diffRowsHtml(tool, d, view) {
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         const { rows, A, B } = d;
         // collapse long runs of unchanged lines, keeping CONTEXT lines around changes
         const keep = new Array(rows.length).fill(false);
         rows.forEach((r, i) => { if (r.t !== 'eq') for (let k = Math.max(0, i - CONTEXT); k <= Math.min(rows.length - 1, i + CONTEXT); k++) keep[k] = true; });
+<<<<<<< HEAD
         let out = '', outA = '', outB = '', i = 0, changeIdx = 0;
         const go = (side, idx) => idx != null ? ` data-go="${side}:${idx}"` : '';
+=======
+        let out = '', i = 0, changeIdx = 0;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         while (i < rows.length) {
             if (!keep[i] && !expandedGaps[tool].has(i)) {
                 let j = i;
                 while (j < rows.length && !keep[j]) j++;
                 if (j - i <= 2) { for (let k = i; k < j; k++) expandedGaps[tool].add(k); continue; }
+<<<<<<< HEAD
                 const gap = `<div class="gap" data-act="expand-gap" data-from="${i}" data-to="${j}"><span class="gt">⋯ ${j - i} unchanged lines — click to show</span></div>`;
                 out += gap; outA += gap; outB += gap;
+=======
+                out += `<div class="gap" data-act="expand-gap" data-from="${i}" data-to="${j}">⋯ ${j - i} unchanged lines — click to show</div>`;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
                 i = j;
                 continue;
             }
@@ -774,6 +815,7 @@
             let ha = a != null ? escapeHtml(a) : '', hb = b != null ? escapeHtml(b) : '';
             if (r.t === 'chg') { const x = inlineDiff(a, b); if (x) { ha = x[0]; hb = x[1]; } }
             if (view === 'split') {
+<<<<<<< HEAD
                 const clsA = { eq: 'eq', chg: 'chg', del: 'del', add: 'blank' }[r.t];
                 const clsB = { eq: 'eq', chg: 'chg', del: 'blank', add: 'add' }[r.t];
                 const cell = (cls, n, h, side, idx, extra) => cls === 'blank'
@@ -855,6 +897,21 @@
         gotoPanel('json', side, findLineInPanel(state.compare.json[side].text, lines, found));
     }
 
+=======
+                const ca = r.t === 'eq' ? '' : a == null ? 'empty-side' : 'del';
+                const cb = r.t === 'eq' ? '' : b == null ? 'empty-side' : 'add';
+                out += `<div class="dn ${ca}"${cAttr}>${na}</div><div class="dc ${ca}">${ha}</div><div class="dn b ${cb}">${nb}</div><div class="dc b ${cb}">${hb}</div>`;
+            } else {
+                if (r.t === 'eq') out += `<div class="dn"${cAttr}>${na}</div><div class="dn">${nb}</div><div class="sg"> </div><div class="dc">${ha}</div>`;
+                if (a != null && r.t !== 'eq') out += `<div class="dn del"${cAttr}>${na}</div><div class="dn del"></div><div class="sg del">−</div><div class="dc del">${ha}</div>`;
+                if (b != null && r.t !== 'eq') out += `<div class="dn add"${a == null ? cAttr : ''}></div><div class="dn add">${nb}</div><div class="sg add">+</div><div class="dc add">${hb}</div>`;
+            }
+            i++;
+        }
+        return out;
+    }
+
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
     const changeCursor = { code: -1, json: -1 };
     function stepChange(tool, dir) {
         const marks = $$('.diff [data-change]', cmpPane(tool));
@@ -914,7 +971,11 @@
         if (ch.type === 'added') v = `<span class="new">${esc(short(ch.val))}</span>`;
         else if (ch.type === 'removed') v = `<span class="old">${esc(short(ch.old))}</span>`;
         else v = `<span class="old">${esc(short(ch.old))}</span><span class="arrow">→</span><span class="new">${esc(short(ch.val))}</span>${ch.type === 'type' ? `<span class="tag">${typeOf(ch.old)} → ${typeOf(ch.val)}</span>` : ''}`;
+<<<<<<< HEAD
         return `<div class="chg-row ${ch.type}" data-act="goto-path" data-type="${ch.type}" data-path="${esc(ch.path)}" title="Click to show in ${ch.type === 'added' ? 'B' : ch.type === 'removed' ? 'A' : 'A and B'}"><span class="ic">${ic}</span><span class="p">${esc(ch.path)}</span><span class="v">${v}</span><button class="ib cp" data-act="copy-change-path" data-path="${esc(ch.path)}" title="Copy path">${icon('link')}</button></div>`;
+=======
+        return `<div class="chg-row ${ch.type}" data-act="copy-change-path" data-path="${esc(ch.path)}" title="Click to copy path"><span class="ic">${ic}</span><span class="p">${esc(ch.path)}</span><span class="v">${v}</span></div>`;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
     }
 
     /* ======================= events ======================= */
@@ -927,11 +988,14 @@
             pickCard(card);
             return;
         }
+<<<<<<< HEAD
         const goEl = ev.target.closest('[data-go]');
         if (goEl && !el && !String(window.getSelection() || '')) {
             gotoFromDiff(goEl.closest('.pane').dataset.tool, goEl.dataset.go);
             return;
         }
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         if (!el) return;
         const act = el.dataset.act;
         const pane = el.closest('.pane');
@@ -947,7 +1011,10 @@
                 return;
             }
             case 'pick': picking ? stopPicking() : startPicking(tool); return;
+<<<<<<< HEAD
             case 'layout': state.layout[tool] = el.dataset.layout; applyLayout(tool); persist(); return;
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
             case 'collapse-all-cards':
             case 'expand-all-cards': {
                 const c = act === 'collapse-all-cards';
@@ -1024,6 +1091,7 @@
             case 'prev-change': stepChange(tool, -1); return;
             case 'next-change': stepChange(tool, 1); return;
             case 'copy-diff': if (lastDiff[tool]) copy(unifiedDiffText(tool), 'Copied unified diff', el); return;
+<<<<<<< HEAD
             case 'copy-change-path': copy(el.dataset.path, 'Copied ' + el.dataset.path, el); return;
             case 'goto-path': {
                 const t = el.dataset.type;
@@ -1031,6 +1099,9 @@
                 if (t !== 'removed') gotoJsonPath('b', el.dataset.path);
                 return;
             }
+=======
+            case 'copy-change-path': copy(el.dataset.path, 'Copied ' + el.dataset.path); return;
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
             case 'expand-gap': {
                 for (let k = +el.dataset.from; k < +el.dataset.to; k++) expandedGaps[tool].add(k);
                 const diffEl = $('.diff', cmpPane(tool));
@@ -1081,6 +1152,7 @@
         $('.crumb', card).textContent = line.parentElement.dataset.path;
     });
 
+<<<<<<< HEAD
     document.addEventListener('mouseover', ev => {
         const sc = ev.target.closest('.sc');
         $$('.sc.hov').forEach(x => x.classList.remove('hov'));
@@ -1098,6 +1170,8 @@
         requestAnimationFrame(() => hSyncing = false);
     }, true);
 
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
     document.addEventListener('input', ev => {
         const el = ev.target;
         const card = el.closest('.card');
@@ -1137,12 +1211,16 @@
         const pane = el.closest('.pane');
         if (!pane) return;
         const tool = pane.dataset.tool;
+<<<<<<< HEAD
         if (el.dataset.act === 'opt') {
             state.compare[tool][el.dataset.opt] = el.checked;
             if (el.dataset.opt === 'wrap') { if (lastDiff[tool]) renderResults(tool); } else runCompare(tool);
             persist();
             return;
         }
+=======
+        if (el.dataset.act === 'opt') { state.compare[tool][el.dataset.opt] = el.checked; runCompare(tool); persist(); return; }
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         if (el.dataset.act === 'sync') { state.syncScroll = el.checked; $$('[data-act="sync"]').forEach(x => x.checked = el.checked); persist(); return; }
         const col = el.closest('.cmp-col');
         if (col && el.dataset.field === 'lang') { state.compare[tool][col.dataset.side].lang = el.value; updateSideLang(tool, col.dataset.side); persist(); }
@@ -1258,7 +1336,10 @@
             try { list.appendChild(renderCard(tool, e)); } catch (err) { /* skip a corrupted entry */ }
         });
         updateEmpty(tool);
+<<<<<<< HEAD
         applyLayout(tool);
+=======
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
         syncCompareInputs(tool);
         if (state.compare[tool].a.text && state.compare[tool].b.text) runCompare(tool);
     });

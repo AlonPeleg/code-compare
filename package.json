@@ -3,7 +3,11 @@
   "displayName": "Dev Toolkit",
   "description": "Code & JSON viewer and compare, right inside VS Code. Send any selection from the editor with a right-click.",
   "publisher": "alonpe",
+<<<<<<< HEAD
   "version": "1.2.0",
+=======
+  "version": "1.0.0",
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
   "icon": "media/icon.png",
   "license": "MIT",
   "engines": {
@@ -120,7 +124,11 @@
   },
   "repository": {
     "type": "git",
+<<<<<<< HEAD
     "url": "https://github.com/AlonPeleg/json-viewer-plus"
+=======
+    "url": "https://github.com/AlonPeleg/code-compare"
+>>>>>>> 404db4675b4bc2e698a7de074f685a589623fddc
   },
   "homepage": "https://alonpeleg.github.io/devtools/"
 }
