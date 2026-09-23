@@ -1,0 +1,267 @@
+/* Dev Toolkit — webview styles. Everything is driven by VS Code theme variables so the panel
+   follows Dark / Light / High Contrast themes automatically. */
+
+:root {
+    --tok-comment: #6a9955; --tok-string: #ce9178; --tok-keyword: #569cd6; --tok-number: #b5cea8;
+    --tok-type: #4ec9b0; --tok-func: #dcdcaa; --tok-tag: #569cd6; --tok-key: #9cdcfe; --tok-macro: #c586c0;
+    --brk-1: #ffd700; --brk-2: #da70d6; --brk-3: #179fff; --brk-unmatched: #f44747;
+    --add-bg: rgba(46, 160, 67, 0.18); --add-strong: rgba(46, 160, 67, 0.45); --add-fg: #3fb950;
+    --del-bg: rgba(248, 81, 73, 0.16); --del-strong: rgba(248, 81, 73, 0.45); --del-fg: #f85149;
+    --chg-fg: #d29922;
+    --accent: var(--vscode-focusBorder, #007fd4);
+    --code-accent: #3794ff; --json-accent: #e8b94a;
+    --border: var(--vscode-panel-border, rgba(128,128,128,.35));
+    --muted: var(--vscode-descriptionForeground, #9d9d9d);
+    --card-bg: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+    --head-bg: var(--vscode-sideBarSectionHeader-background, rgba(128,128,128,.08));
+    --mono: var(--vscode-editor-font-family, "Cascadia Code", Consolas, monospace);
+    --mono-size: var(--vscode-editor-font-size, 13px);
+    --radius: 4px;
+}
+body.vscode-light {
+    --tok-comment: #008000; --tok-string: #a31515; --tok-keyword: #0000ff; --tok-number: #098658;
+    --tok-type: #267f99; --tok-func: #795e26; --tok-tag: #800000; --tok-key: #001080; --tok-macro: #af00db;
+    --brk-1: #0431fa; --brk-2: #319331; --brk-3: #7b3814; --brk-unmatched: #cc0000;
+    --add-bg: rgba(46, 160, 67, 0.14); --add-strong: rgba(46, 160, 67, 0.35); --add-fg: #1a7f37;
+    --del-bg: rgba(207, 34, 46, 0.10); --del-strong: rgba(207, 34, 46, 0.30); --del-fg: #cf222e;
+    --chg-fg: #9a6700; --json-accent: #b58400;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0; padding: 0; overflow: hidden;
+    font-family: var(--vscode-font-family); font-size: var(--vscode-font-size, 13px);
+    color: var(--vscode-foreground); background: var(--vscode-editor-background);
+}
+#app { display: flex; flex-direction: column; height: 100vh; }
+.hidden { display: none !important; }
+button { font-family: inherit; font-size: inherit; color: inherit; }
+svg.i { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------------- top bar & tabs ---------------- */
+.topbar { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); background: var(--vscode-editorGroupHeader-tabsBackground); flex-shrink: 0; min-height: 34px; }
+.brand { display: flex; align-items: center; padding: 0 12px; font-weight: 700; letter-spacing: .2px; white-space: nowrap; }
+.brand .cursor { color: var(--accent); animation: blink 1.1s steps(1) infinite; margin-left: 1px; }
+@keyframes blink { 50% { opacity: 0; } }
+.tool-tab { display: flex; align-items: center; gap: 8px; padding: 0 14px; border: 0; background: transparent; cursor: pointer; color: var(--vscode-tab-inactiveForeground); border-right: 1px solid var(--border); border-top: 2px solid transparent; white-space: nowrap; }
+.tool-tab:first-of-type { border-left: 1px solid var(--border); }
+.tool-tab:hover { background: var(--vscode-tab-hoverBackground); }
+.tool-tab.active { background: var(--vscode-tab-activeBackground, var(--vscode-editor-background)); color: var(--vscode-tab-activeForeground); border-top-color: var(--accent); }
+.dot { width: 8px; height: 8px; border-radius: 2px; }
+.dot.code { background: var(--code-accent); } .dot.json { background: var(--json-accent); }
+.topbar .spacer { flex: 1; }
+
+.subbar { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sub-tab { padding: 7px 14px; border: 0; background: transparent; cursor: pointer; font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid transparent; border-right: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+.sub-tab:hover { color: var(--vscode-foreground); }
+.sub-tab.active { color: var(--vscode-foreground); border-bottom-color: var(--accent); }
+.count { font-size: 10px; min-width: 16px; padding: 0 5px; border-radius: 8px; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); letter-spacing: 0; }
+.count:empty { display: none; }
+
+.pane { flex: 1; overflow: auto; padding: 12px 14px 24px; display: none; }
+.pane.active { display: block; }
+
+/* ---------------- common controls ---------------- */
+.pane-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.pane-head h2 { font-size: 14px; margin: 0; font-weight: 700; }
+.pane-head .hint { color: var(--muted); font-size: 11px; }
+.pane-head .spacer { flex: 1; }
+.row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; border-radius: 2px; padding: 4px 10px; cursor: pointer; background: var(--vscode-button-background); color: var(--vscode-button-foreground); font-size: 12px; line-height: 16px; white-space: nowrap; }
+.btn:hover { background: var(--vscode-button-hoverBackground); }
+.btn.secondary { background: var(--vscode-button-secondaryBackground); color: var(--vscode-button-secondaryForeground); }
+.btn.secondary:hover { background: var(--vscode-button-secondaryHoverBackground); }
+.btn.on { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+.ib { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 22px; border: 0; border-radius: 4px; background: transparent; cursor: pointer; color: var(--vscode-icon-foreground, var(--vscode-foreground)); opacity: .8; padding: 0; flex-shrink: 0; }
+.ib:hover { background: var(--vscode-toolbar-hoverBackground); opacity: 1; }
+.ib.on { background: var(--vscode-inputOption-activeBackground); color: var(--vscode-inputOption-activeForeground); outline: 1px solid var(--vscode-inputOption-activeBorder, transparent); opacity: 1; }
+.ib.danger:hover { color: var(--vscode-errorForeground); }
+.ib.ok { color: var(--add-fg); opacity: 1; }
+.ib .lbl { font-size: 10px; font-weight: 700; }
+.ib.wide { width: auto; padding: 0 6px; gap: 4px; font-size: 11px; }
+.sep { width: 1px; align-self: stretch; background: var(--border); margin: 2px 2px; }
+
+.seg { display: inline-flex; border: 1px solid var(--vscode-input-border, var(--border)); border-radius: 3px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 3px 9px; cursor: pointer; font-size: 11px; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; }
+.seg button + button { border-left: 1px solid var(--vscode-input-border, var(--border)); }
+.seg button.active { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+
+.check { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); cursor: pointer; user-select: none; white-space: nowrap; }
+.check input { margin: 0; accent-color: var(--accent); }
+.check:hover { color: var(--vscode-foreground); }
+
+textarea, input[type=text], select {
+    background: var(--vscode-input-background); color: var(--vscode-input-foreground);
+    border: 1px solid var(--vscode-input-border, var(--border)); border-radius: 2px; outline: none;
+}
+textarea:focus, input[type=text]:focus, select:focus { border-color: var(--vscode-focusBorder); }
+textarea { font-family: var(--mono); font-size: 12px; resize: vertical; padding: 8px; width: 100%; tab-size: 4; }
+select { font-size: 11px; padding: 2px 4px; }
+
+/* ---------------- composer ---------------- */
+.composer { border: 1px dashed var(--border); border-radius: var(--radius); padding: 8px; margin-bottom: 12px; background: var(--card-bg); transition: border-color .15s, background .15s; }
+.composer.drag { border-color: var(--accent); background: var(--vscode-list-dropBackground); }
+.composer textarea { min-height: 64px; height: 64px; }
+.composer .row { margin-top: 6px; }
+.composer .hint { color: var(--muted); font-size: 11px; flex: 1; min-width: 160px; }
+.composer .err { color: var(--vscode-errorForeground); font-size: 11px; flex-basis: 100%; }
+.composer .err:empty { display: none; }
+
+.pick-banner { margin: -4px 0 10px; color: var(--vscode-textLink-foreground); font-size: 12px; display: flex; align-items: center; gap: 8px; }
+
+.empty { text-align: center; color: var(--muted); padding: 28px 12px; border: 1px dashed var(--border); border-radius: var(--radius); font-size: 12px; line-height: 1.7; }
+.empty kbd, .kbd { font-family: var(--mono); font-size: 10.5px; padding: 1px 5px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 3px; background: var(--card-bg); }
+
+/* ---------------- cards ---------------- */
+.card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; background: var(--vscode-editor-background); overflow: hidden; }
+.card.flash { animation: cardflash 1.1s ease-out; }
+@keyframes cardflash { 0% { box-shadow: 0 0 0 2px var(--accent); } 100% { box-shadow: 0 0 0 2px transparent; } }
+.card-head { display: flex; align-items: center; gap: 6px; padding: 4px 6px 4px 4px; background: var(--head-bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; min-height: 32px; }
+.card.collapsed .card-head { border-bottom: 0; }
+.card.collapsed .card-tools, .card.collapsed .card-body { display: none; }
+.chev { transition: transform .12s; }
+.card.collapsed .chev { transform: rotate(-90deg); }
+.card-head .name { background: transparent; border: 1px solid transparent; font-weight: 700; font-size: 12px; padding: 2px 4px; min-width: 60px; width: 150px; flex: 0 1 auto; color: var(--vscode-foreground); }
+.card-head .name:hover { border-color: var(--vscode-input-border, var(--border)); }
+.card-head .name:focus { background: var(--vscode-input-background); }
+.meta { color: var(--muted); font-size: 11px; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.card-head .actions { margin-left: auto; display: flex; align-items: center; gap: 1px; }
+
+.badge { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 6px; border-radius: 9px; color: #fff; border: 0; cursor: pointer; font-family: var(--vscode-font-family); line-height: 12px; }
+.badge.dark-text { color: #1b1b1b; }
+select.badge { field-sizing: content; max-width: 150px; appearance: none; -webkit-appearance: none; padding-right: 14px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 8px) 55%, calc(100% - 5px) 55%; background-size: 3px 3px; background-repeat: no-repeat; }
+select.badge option { color: var(--vscode-foreground); background: var(--vscode-dropdown-background); }
+.badge.static { cursor: default; }
+
+.card-tools { display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.find { display: inline-flex; align-items: center; background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, var(--border)); border-radius: 2px; height: 22px; }
+.find:focus-within { border-color: var(--vscode-focusBorder); }
+.find input { border: 0; background: transparent; width: 130px; font-size: 11px; padding: 0 6px; height: 20px; }
+.find input:focus { border: 0; }
+.find .ctr { font-size: 10px; color: var(--muted); font-family: var(--mono); padding: 0 4px; min-width: 30px; text-align: right; }
+.find .ib { width: 20px; height: 20px; }
+.crumb { font-family: var(--mono); font-size: 11px; color: var(--vscode-textLink-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.card-tools .right { margin-left: auto; display: flex; gap: 1px; }
+
+.card-body { max-height: 60vh; overflow: auto; font-family: var(--mono); font-size: var(--mono-size); line-height: 1.5; }
+.card-body.tall { max-height: none; }
+
+/* code view */
+.code { padding: 4px 0; min-width: max-content; }
+.code.wrap { min-width: 0; }
+.cl { display: flex; }
+.cl:hover { background: var(--vscode-editor-lineHighlightBackground, rgba(128,128,128,.07)); }
+.ln { flex-shrink: 0; width: 56px; padding-right: 12px; text-align: right; color: var(--vscode-editorLineNumber-foreground); user-select: none; position: sticky; left: 0; background: var(--vscode-editor-background); display: flex; justify-content: flex-end; align-items: flex-start; gap: 2px; }
+.fold { width: 12px; cursor: pointer; color: var(--muted); opacity: .0; font-size: 10px; }
+.code:hover .fold, .fold.folded { opacity: .8; }
+.fold:hover { opacity: 1; color: var(--vscode-foreground); }
+.ct { white-space: pre; padding-right: 16px; }
+.code.wrap .ct { white-space: pre-wrap; word-break: break-word; }
+.fold-ph { margin-left: 4px; padding: 0 4px; border-radius: 3px; background: var(--vscode-editor-foldBackground, rgba(128,128,128,.2)); color: var(--muted); cursor: pointer; }
+
+.tok-comment { color: var(--tok-comment); font-style: italic; } .tok-string { color: var(--tok-string); }
+.tok-keyword { color: var(--tok-keyword); } .tok-number { color: var(--tok-number); }
+.tok-type { color: var(--tok-type); } .tok-func { color: var(--tok-func); } .tok-tag { color: var(--tok-tag); }
+.tok-key { color: var(--tok-key); } .tok-macro { color: var(--tok-macro); }
+.brk-1 { color: var(--brk-1); } .brk-2 { color: var(--brk-2); } .brk-3 { color: var(--brk-3); } .brk-unmatched { color: var(--brk-unmatched); }
+
+mark.m { background: var(--vscode-editor-findMatchHighlightBackground, rgba(234,92,0,.33)); color: inherit; border-radius: 2px; }
+mark.m.cur { background: var(--vscode-editor-findMatchBackground, #f7d75c); outline: 1px solid var(--vscode-editor-findMatchBorder, #ffaa00); }
+
+/* json tree */
+.tree { padding: 6px 10px; min-width: max-content; }
+.jn > .jl { display: flex; align-items: baseline; white-space: pre; border-radius: 2px; padding-right: 8px; cursor: default; }
+.jn > .jl:hover { background: var(--vscode-list-hoverBackground); }
+.jn > .jl.sel { background: var(--vscode-list-inactiveSelectionBackground); }
+.jt { width: 14px; flex-shrink: 0; text-align: center; color: var(--muted); cursor: pointer; font-size: 9px; user-select: none; }
+.jkids { margin-left: 6px; padding-left: 12px; border-left: 1px solid var(--vscode-tree-indentGuidesStroke, rgba(128,128,128,.3)); }
+.jn.closed > .jkids, .jn.closed > .jclose { display: none; }
+.jn:not(.closed) > .jl .jsum { display: none; }
+.jsum { color: var(--muted); cursor: pointer; }
+.jsum .n { font-size: 10.5px; opacity: .8; margin-left: 6px; font-style: italic; }
+.jclose { padding-left: 14px; white-space: pre; }
+.jk { color: var(--tok-key); } .js { color: var(--tok-string); } .jnum { color: var(--tok-number); }
+.jb, .jnull { color: var(--tok-keyword); } .jp { color: var(--muted); }
+.jidx { color: var(--muted); font-size: 10.5px; }
+
+/* ---------------- compare ---------------- */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; min-height: 34px; align-items: center; background: var(--card-bg); }
+.chips .hint { color: var(--muted); font-size: 11px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 3px 2px 8px; border-radius: 12px; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); font-size: 11px; max-width: 260px; }
+.chip .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip button { border: 0; border-radius: 9px; font-size: 9.5px; font-weight: 700; padding: 1px 6px; cursor: pointer; background: rgba(0,0,0,.25); color: inherit; }
+.chip button:hover { background: var(--vscode-button-background); color: var(--vscode-button-foreground); }
+
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .cmp-grid { grid-template-columns: 1fr; } }
+.cmp-col { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.cmp-col .card-head { gap: 4px; }
+.cmp-col .plabel { font-size: 10px; font-weight: 700; letter-spacing: .6px; color: var(--muted); padding-left: 4px; }
+.cmp-col .name { width: 100px; }
+.cmp-col textarea { border: 0; border-radius: 0; height: 210px; min-height: 80px; resize: vertical; white-space: pre; overflow: auto; }
+.cmp-col .err { color: var(--vscode-errorForeground); font-size: 11px; padding: 3px 8px; border-top: 1px solid var(--border); font-family: var(--mono); }
+.cmp-col .err:empty { display: none; }
+.cmp-col .foot { font-size: 10.5px; color: var(--muted); padding: 2px 8px; border-top: 1px solid var(--border); font-family: var(--mono); }
+
+.res-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 14px 0 8px; }
+.res-head h3 { margin: 0; font-size: 13px; }
+.res-head .spacer { flex: 1; }
+.results { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.stats { display: flex; align-items: center; gap: 12px; padding: 6px 10px; border-bottom: 1px solid var(--border); font-size: 11.5px; background: var(--head-bg); flex-wrap: wrap; }
+.stats b { font-weight: 700; }
+.stats .add { color: var(--add-fg); } .stats .del { color: var(--del-fg); } .stats .chg { color: var(--chg-fg); } .stats .same { color: var(--muted); }
+.stats .spacer { flex: 1; }
+.res-msg { padding: 16px; color: var(--muted); font-size: 12px; }
+.res-msg.ok { color: var(--add-fg); }
+.res-msg.bad { color: var(--vscode-errorForeground); }
+
+.diff { font-family: var(--mono); font-size: 12px; line-height: 1.5; max-height: 65vh; overflow: auto; }
+.diff.split { display: grid; grid-template-columns: auto minmax(0,1fr) auto minmax(0,1fr); }
+.diff.unified { display: grid; grid-template-columns: auto auto auto minmax(0,1fr); }
+.diff > div { white-space: pre-wrap; word-break: break-word; padding: 0 8px; min-height: 18px; }
+.diff .dn { color: var(--vscode-editorLineNumber-foreground); text-align: right; user-select: none; padding: 0 6px 0 8px; font-size: 11px; }
+.diff .sg { user-select: none; color: var(--muted); padding: 0 4px; text-align: center; }
+.diff.split .dc.b { border-left: 1px solid var(--border); }
+.diff.split .dn.b { border-left: 1px solid var(--border); }
+.diff .add { background: var(--add-bg); } .diff .del { background: var(--del-bg); }
+.diff .sg.add { color: var(--add-fg); } .diff .sg.del { color: var(--del-fg); }
+.diff .empty-side { background: repeating-linear-gradient(135deg, transparent 0 5px, rgba(128,128,128,.08) 5px 10px); }
+.diff ins { text-decoration: none; background: var(--add-strong); border-radius: 2px; }
+.diff del { text-decoration: none; background: var(--del-strong); border-radius: 2px; }
+.diff .gap { grid-column: 1 / -1; text-align: center; color: var(--vscode-textLink-foreground); background: var(--head-bg); cursor: pointer; font-size: 11px; padding: 2px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-family: var(--vscode-font-family); }
+.diff .gap:hover { background: var(--vscode-list-hoverBackground); }
+.diff .hl { animation: hl 1.2s ease-out; }
+@keyframes hl { 0% { box-shadow: inset 0 0 0 999px var(--vscode-editor-findMatchHighlightBackground, rgba(234,92,0,.33)); } 100% { box-shadow: none; } }
+
+.changes { max-height: 65vh; overflow: auto; }
+.chg-row { display: grid; grid-template-columns: 18px minmax(80px, max-content) 1fr; gap: 8px; align-items: baseline; padding: 4px 10px; border-bottom: 1px solid var(--border); border-left: 3px solid transparent; font-family: var(--mono); font-size: 12px; cursor: pointer; }
+.chg-row:hover { background: var(--vscode-list-hoverBackground); }
+.chg-row.added { border-left-color: var(--add-fg); } .chg-row.removed { border-left-color: var(--del-fg); } .chg-row.changed, .chg-row.type { border-left-color: var(--chg-fg); }
+.chg-row .ic { font-weight: 700; text-align: center; }
+.chg-row.added .ic { color: var(--add-fg); } .chg-row.removed .ic { color: var(--del-fg); } .chg-row.changed .ic, .chg-row.type .ic { color: var(--chg-fg); }
+.chg-row .p { color: var(--vscode-textLink-foreground); word-break: break-all; }
+.chg-row .v { word-break: break-word; min-width: 0; }
+.chg-row .v .old { background: var(--del-bg); border-radius: 2px; padding: 0 3px; }
+.chg-row .v .new { background: var(--add-bg); border-radius: 2px; padding: 0 3px; }
+.chg-row .v .arrow { color: var(--muted); margin: 0 6px; }
+.chg-row .tag { font-size: 9.5px; color: var(--muted); margin-left: 6px; text-transform: uppercase; }
+
+/* ---------------- toast ---------------- */
+.toast { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; background: var(--vscode-notifications-background, #252526); color: var(--vscode-notifications-foreground, #ccc); border: 1px solid var(--vscode-notifications-border, var(--border)); padding: 6px 14px; border-radius: 4px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.3); transition: opacity .18s, transform .18s; z-index: 50; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* pick-to-compare mode */
+.picking .card { cursor: pointer; }
+.picking .card:hover { outline: 1px solid var(--accent); }
+.card.picked { outline: 2px solid var(--accent) !important; }
+
+/* narrow split panes */
+@media (max-width: 600px) {
+    .tool-tab .long, .pane-head .hint, .composer .hint { display: none; }
+    .tool-tab { padding: 0 10px; }
+    .pane { padding: 10px 8px 20px; }
+}
